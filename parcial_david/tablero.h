@@ -2,3 +2,19 @@
 #define TABLERO_H
 
 #endif // TABLERO_H
+
+class tablero{
+
+private:
+
+
+
+
+
+public:
+
+
+
+}
+
+
