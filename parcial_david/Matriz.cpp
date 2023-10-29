@@ -28,7 +28,7 @@ int Matriz::GetColumnas() const{ //obtener las columnas
 
 int Matriz::GetPosicion(const int& i, const int& j)const{ // pide dos parametros, la i hace referencia a las filas y la j a las columnas
     assert(i >= 0 && j >= 0); // assert verfica la condicion, si da falso lo detiene
-    return datos[i*columnas+j]; // algebra de punteros para encontrar la posicion
+    return datos[i*columnas+j]; // algebra de punteros para encontrar la posicion y retorne el valor asociadao a esta
 }
 
 void Matriz::SetPosicion(int i, int j, int n){ // tres parametros, el primero para la fila, el segundo para la columna, y el tercero para la ficha

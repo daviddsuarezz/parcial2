@@ -2,18 +2,45 @@
 #include <cstring>
 #include <istream>
 #include "tablero.H"
+using namespace std;
 
-char Tablero::intachar(int n){ //esta funcion servira para que cuando el usuario ingrese un numero, este este asociado a una letra
+void Tablero::CambiarTurno(){
+    if(turno == 1){// cambia el turno muy basico
+        turno = 2;
+    }
+    else{
+        turno = 1;
+    }
+
+    if(!CanSetFicha()){ // ! invierte el vslot booleano, y lo que pasa aquie es que si el juagador
+        //no puede puede colocar ficha, pasa al otro jugador
+        if(turno == 1){
+            turno = 2;
+        }
+
+        else{
+            turno = 1;
+        }
+
+        if(!CanSetFicha()){ // aqui verifica si el actual puede seguir haciendo, doble verificacion si no puede
+            // se acaba el programa
+            turno = 0;
+        }
+    }
+
+}
+
+char Tablero::IntaChar(int n){ //esta funcion servira para que cuando el usuario ingrese un numero, este este asociado a una letra
     if(n == 0){
         return ' '; // si la ficha ingresada es un 0, se pone espacion en blanco
     }
 
     if(n == 1){
-        return 'x'; // si la ficha ingresada es uno, se pone x
+        return '*'; // si la ficha ingresada es uno, se pone x
     }
 
     if(n == 2){
-        return 'o'; // si la ficha ingresada es dos, se pone o
+        return '_'; // si la ficha ingresada es dos, se pone o
     }
 
     return ' ';
@@ -54,7 +81,7 @@ int Tablero::Ganador() const{ // funcion que dará al ganador de la partida
 
     contador1 = contador2 = 0;
 
-    for (int i = 0: i < tablero.GetFilas(); i++){ //estamos iterando sobre la matriz
+    for (int i = 0; i < tablero.GetFilas(); i++){ //estamos iterando sobre la matriz
         for(int j = 0; j < tablero.GetColumnas(); j++){
             if(tablero.GetPosicion(i,j)== 1){ //utilizamos el metodo para ir a la posicion y evaluamos 1, lo que significa la ficha del jugador 1
                 contador1++;
@@ -69,10 +96,10 @@ int Tablero::Ganador() const{ // funcion que dará al ganador de la partida
         resultado = 0; //hubo un empate
     }
     else if(contador1 > contador2){
-        resultador = 1; //ganó el jugador 1
+        resultado = 1; //ganó el jugador 1
     }
     else if(contador1 < contador2){
-        resultador = 2; //ganó el jugador 2
+        resultado = 2; //ganó el jugador 2
     }
     return resultado;
 }
@@ -80,7 +107,7 @@ int Tablero::Ganador() const{ // funcion que dará al ganador de la partida
 int Tablero::GetPuntuacion(const int& n) const{ // obtendremos la puntacion de un jugador en especifico
     int puntuacion = 0;
     if(n == 1){
-        for (int i = 0: i < tablero.GetFilas(); i++){ //estamos iterando sobre la matriz
+        for (int i = 0; i < tablero.GetFilas(); i++){ //estamos iterando sobre la matriz
                 for(int j = 0; j < tablero.GetColumnas(); j++){
                 if(tablero.GetPosicion(i,j)== 1){ // si lo que esta en esa posicion es uno, le suma a la puntuacion
 
@@ -91,7 +118,7 @@ int Tablero::GetPuntuacion(const int& n) const{ // obtendremos la puntacion de u
 
     }
     else if(n == 2){
-        for (int i = 0: i < tablero.GetFilas(); i++){ //estamos iterando sobre la matriz
+        for (int i = 0; i < tablero.GetFilas(); i++){ //estamos iterando sobre la matriz
             for(int j = 0; j < tablero.GetColumnas(); j++){
                 if(tablero.GetPosicion(i,j)== 2){ // si lo que esta en esa posicion es dos, le suma a la puntuacion
 
@@ -123,7 +150,7 @@ void Tablero::InicializarTablero(){ // inicalizamos el tablero
     tablero.SetPosicion((GetFilas()/2),(GetColumnas()/2),1); // ficha del juegador uno en el medio del tablero
 }
 
-void Tablero::SetTurno(int& n){ //le da un valor al atributo turno del tablero
+void Tablero::SetTurno(int&n){ //le da un valor al atributo turno del tablero
     turno = n;
 }
 
@@ -167,8 +194,103 @@ bool Tablero::checkDirection(const int& x, const int& y, const int& dx, const in
 }
 
 void Tablero::SetFicha(const int& x, const int& y){
+    if(PosicionValida(x,y)){ //valida primero si la posicion que ingresó el usuario es valida
+        int otra = (turno == 1) ? 2 : 1; //mismo cambio para verificar la ficha del rival
 
+        // Lista de todas las direcciones a verificar
+        int dirs[8][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}; //todas las direcciones
+
+        for (int i = 0; i < 8; ++i) {
+            setFichasInDirection(x, y, dirs[i][0], dirs[i][1], otra); //va a poner direccion por direccion
+        }
+    }
+
+    if(fichas_restantes > 1 && CanSetFicha()){ //para saber si se puede seguir colocando fichas
+        fichas_restantes--; // resta las fichas que colocamos
+    }
+    else{
+        fichas_restantes = fichas_maximas; // cambia en el atributo de tablero
+        CambiarTurno(); // se le da el turno al otro jugador
+    }
 }
 
-void Tablero::Imprimir_tablero(){}
+void Tablero::setFichasInDirection(const int& x, const int& y, const int& dx, const int& dy, const int& otra){
+    int iterador = 1;
+
+    while (GetPosicion(x + iterador * dx, y + iterador * dy) == otra) { // itera sobre toda esa direccion mientras sea igual a la del rival
+        ++iterador; //iterador incrementa
+        if (GetPosicion(x + iterador * dx, y + iterador * dy) == turno) { // si se llega a encontrar una ficha en esa posicion
+            for(int it = 0; it <= iterador; it++) //vamos a iterar otra vez sobre la posiciones
+                tablero.SetPosicion(x + it * dx,y + it * dy,turno); // iteramos por cada una de la posicion, cambiando la ficha en esa posicion
+            break;
+        }
+    }
+}
+
+void Tablero::Imprimir_tablero(){
+
+    char c = 'a'; // para darle un valor a las columnas
+
+    cout << "  "; // espacio
+
+    for(int i = 0; i < tablero.GetFilas();  i++){
+        cout << "\033[1;34m" << c << "\033[1;0m" << " "; // por medio del codigo asscci podemos ir aumentado de a,b,c....
+        c++;
+    }
+
+    cout << endl; //salto de linea
+
+    cout << " ";
+
+    for(int i = 0; i < tablero.GetFilas(); i++){
+        cout << "--" ; // lineas que delimitan
+    }
+
+    cout << endl; // salto de linea
+
+    for(int i = 0; i < tablero.GetFilas(); i++){
+        cout << "\033[1;34m" << i << "\033[1;0m" << "|";  // el numero de la fila El código de escape \033[1;34m cambia el color del texto a azul brillante, y \033[1;0m restablece el color del texto a su valor predeterminado. Por lo tanto, la letra se imprimirá en azul brillante.
+        for(int j = 0; j < tablero.GetFilas(); j++){ // vamos a iterar sobre la matriz
+            if(tablero.GetPosicion(i,j) == 1){ // si la posicion es igual a 1
+                cout << "\033[1;93m" << IntaChar(tablero.GetPosicion(i,j)) << "\033[1;0m"; //va a cambiar ese numero a un char, lo imprime en colo amarillo brillante por codigo ansi
+            }
+
+            if(tablero.GetPosicion(i,j) == 2){
+                cout << "\033[1;32m" << IntaChar(tablero.GetPosicion(i,j)) << "\033[1;0m"; // cambia el 2 encontrado por el _ y lo imprime en color verde por codigo ansi
+            }
+
+            if(tablero.GetPosicion(i,j) == 0 && !PosicionValida(i,j)){ // y aqui va a imprimir el espacio en blanco
+                cout  << IntaChar(tablero.GetPosicion(i,j));
+            }
+
+            cout << "|";
+        }
+        cout << endl;
+    }
+
+    cout << " ";
+
+    for(int i = 0; i < tablero.GetFilas(); i++){
+        cout << "--" ; // debajo del tablero
+    }
+
+    cout << endl;
+
+    if(turno == 1 || turno == 2){
+        cout << "Turno  "
+             << (fichas_maximas - fichas_restantes + 1)
+             << "/"
+             << fichas_maximas
+             << " del jugador "
+             << GetTurnoActual()
+             << ": "
+             << " ("
+             << IntaChar(GetTurnoActual())
+             << ")"
+             << endl;
+    }
+    else{
+        cout<< "Partida finalizada." ;
+    }
+}
 
