@@ -5,11 +5,11 @@
 
 class Matriz{
 
-public:
+private:
     int* datos;
     int filas, columnas;
 
-private:
+public:
     Matriz();
 
     Matriz(const int& f, const int& c);
