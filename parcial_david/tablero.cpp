@@ -2,6 +2,10 @@
 #include <cstring>
 #include <istream>
 #include "tablero.H"
+#include <fstream>
+#include <ctime>
+#include <sstream>
+
 using namespace std;
 
 void Tablero::CambiarTurno(){
@@ -12,7 +16,7 @@ void Tablero::CambiarTurno(){
         turno = 1;
     }
 
-    if(!CanSetFicha()){ // ! invierte el vslot booleano, y lo que pasa aquie es que si el juagador
+    if(!CanSetFicha()){ // ! invierte el  booleano, y lo que pasa, es que si el juagador
         //no puede puede colocar ficha, pasa al otro jugador
         if(turno == 1){
             turno = 2;
@@ -293,4 +297,5 @@ void Tablero::Imprimir_tablero(){
         cout<< "Partida finalizada." ;
     }
 }
+
 
