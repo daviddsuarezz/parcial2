@@ -243,7 +243,7 @@ int main(){
                   "-Si no es posible para el jugador encerrar las fichas del rival, debera pasar de turno.\n"
                   "\n"
                   "La partida finaliza cuando el tablero se llena o ningun jugador tiene movimientos validos.\n"
-                  "Gana el jugador con mas fichas en el tablero."
+                  "Gana el jugador con mas fichas en el tablero.\n"
                  <<endl;
 
             cout<<"1.volver al menu principal.\n0.salir(cualquier otra tecla).\n"<<endl;
