@@ -162,6 +162,7 @@ bool Reversi(Jugador& jugador_1, Jugador& jugador_2, Tablero& t){
 
     }while(otra_partida == 's');
 
+
     cout << "Resultados finales: " << endl;
     cout << " ";
     jugador_1.MostrarNombreJugador();
