@@ -7,7 +7,6 @@
 #include <iostream>
 #include "tablero.h"
 #include "jugador.h"
-#include "matriz.h"
 
 using namespace std;
 struct Partida {
