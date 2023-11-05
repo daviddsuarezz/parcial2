@@ -101,8 +101,6 @@ void leerHistorico() {
 }
 
 bool Reversi(Jugador& jugador_1, Jugador& jugador_2, Tablero& t){
-    char otra_partida;
-    do{
 
         while(t.FinPartida()){
 
@@ -111,13 +109,12 @@ bool Reversi(Jugador& jugador_1, Jugador& jugador_2, Tablero& t){
 
                 if(t.GetTurnoActual()==1){
                     if(jugador_1.escogePosicion(t)){
-                        //DialogoGuardar(jugador_1,jugador_2,t);
                     }
                 }
 
                 if(t.GetTurnoActual()==2){
                     if(jugador_2.escogePosicion(t)){
-                        //DialogoGuardar(jugador_1,jugador_2,t);
+
                     }
                 }
             }
@@ -148,32 +145,10 @@ bool Reversi(Jugador& jugador_1, Jugador& jugador_2, Tablero& t){
         cout << "\t-";
         jugador_2.MostrarNombreJugador();
         cout << " lleva " << jugador_2.NumeroPartidasGanadas() << " partidas ganadas, acumulando un total de: " << jugador_2.GetPuntuacion() << endl;
-        cout << "¿Jugar de nuevo(S/N)?: ";
         GuardarPartida(jugador_1,jugador_2);
-
-            do{
-            cin >> otra_partida;
-            otra_partida = tolower(otra_partida);
-        }while(otra_partida != 's' && otra_partida != 'n');
-
-        if(otra_partida == 's'){
-            t.VaciarTablero();
-        }
-
-    }while(otra_partida == 's');
-
-
-    cout << "Resultados finales: " << endl;
-    cout << " ";
-    jugador_1.MostrarNombreJugador();
-    cout << " " << jugador_1.NumeroPartidasGanadas() << " partidas ganadas, acumulando un total de: " << jugador_1.GetPuntuacion() << endl;
-    cout << " ";
-    jugador_2.MostrarNombreJugador();
-    cout << " " << jugador_2.NumeroPartidasGanadas() << " partidas ganadas, acumulando un total de: " << jugador_2.GetPuntuacion() << endl;
-    cout << endl;
-    cout << "El juego ha finalizado." << endl;
-
-    return 1;
+        cout << endl;
+        cout << endl;
+        return 1;
 }
 
 int main(){
@@ -184,15 +159,19 @@ int main(){
         cout<<"Bienvenido a REVERSI\n"<<endl;
 
 
-        cout << "Ingrese una opcion.\n1.Jugar\n2.Ver historial\n3.Reglas"<<endl;
-        cin>> opcion;
-        cout<<endl;
+        cout << "Ingrese una opcion.\n1.Jugar\n2.Ver historial\n3.Reglas\n0.salir"<<endl;
+        while(!(cin >> opcion)){
+                cout << "Por favor, ingrese un número válido." << endl;
+                cin.clear();
+                cin.ignore();
+        }
+        cout << endl;
         if(opcion==1){
             Jugador jugador_1, jugador_2;
             int n;
             int f;
             cout << "¿De que tamanio quieres la matriz cuadrada?: ";
-            cin >> f;
+                    cin >> f;
             Tablero t(f,f);
             t.InicializarTablero();
             cout << "Inserta el nombre del jugador 1 (NEGRAS): ";
@@ -219,6 +198,7 @@ int main(){
             cout << endl;
 
             Reversi(jugador_1,jugador_2,t);
+
         }
 
         else if(opcion==2){

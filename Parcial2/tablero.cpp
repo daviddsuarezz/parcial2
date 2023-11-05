@@ -28,6 +28,7 @@ void Tablero::CambiarTurno(){
 
         if(!CanSetFicha()){ // aqui verifica si el actual puede seguir haciendo, doble verificacion si no puede
             // se acaba el programa
+
             turno = 0;
         }
     }
@@ -152,6 +153,7 @@ void Tablero::InicializarTablero(){ // inicalizamos el tablero
 void Tablero::SetTurno(int&n){ //le da un valor al atributo turno del tablero
     turno = n;
 }
+
 bool Tablero::PosicionValida(const int& x, const int& y) const {
     if (GetPosicion(x, y) != 0) { // verifica si la posicion esta vacia
         return false;
@@ -204,8 +206,8 @@ bool Tablero::CanSetFicha(){
 
 }
 
-
 void Tablero::SetFicha(const int& x, const int& y){
+
     if(PosicionValida(x,y)){ //valida primero si la posicion que ingresó el usuario es valida
         int otra = (turno == 1) ? 2 : 1; //mismo cambio para verificar la ficha del rival
 
@@ -224,6 +226,8 @@ void Tablero::SetFicha(const int& x, const int& y){
         fichas_restantes = fichas_maximas; // cambia en el atributo de tablero
         CambiarTurno(); // se le da el turno al otro jugador
     }
+
+
 }
 
 void Tablero::setFichasInDirection(const int& x, const int& y, const int& dx, const int& dy, const int& otra){
@@ -238,6 +242,10 @@ void Tablero::setFichasInDirection(const int& x, const int& y, const int& dx, co
         }
     }
 }
+
+
+
+
 
 void Tablero::Imprimir_tablero(){
 
@@ -311,15 +319,3 @@ void Tablero::Imprimir_tablero(){
     }
 }
 
-void Tablero::VaciarTablero(){
-    tablero = tablero_original;
-
-    if(jugador_comienzo == 1){
-        jugador_comienzo = 2;
-        SetTurno(jugador_comienzo);
-    }
-    else{
-        jugador_comienzo = 1;
-        SetTurno(jugador_comienzo);
-    }
-}

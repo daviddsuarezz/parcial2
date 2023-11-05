@@ -37,3 +37,4 @@ void Matriz::SetPosicion(int i, int j, int n){ // tres parametros, el primero pa
     assert(i >= 0 && j >= 0); // assert verfica la condicion, si da falso detiene el programa
     datos[i*columnas+j] = n;
 }
+

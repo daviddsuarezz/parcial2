@@ -1,6 +1,7 @@
 #include "jugador.h"
 //#include "tablero.h"
 #include <iostream>
+using namespace std;
 
 
 char *Jugador::getNombre() const
@@ -26,17 +27,6 @@ Jugador::~Jugador(){
     delete [] nombre;
 }
 
-Jugador& Jugador::operator=(Jugador& j){
-    if(this != &j){
-        setNombre(j.nombre);
-        num_turno = j.num_turno;
-        puntuacion = j.puntuacion;
-        partidas_ganadas = j.partidas_ganadas;
-
-    }
-
-    return *this;
-}
 
 void Jugador::TotalScore(const Tablero& t){
     puntuacion += t.GetPuntuacion(num_turno);
@@ -73,20 +63,6 @@ bool Jugador::escogePosicion(Tablero& t){
     int aux;
     char c;
     bool termina = false;
-
-
-        if(NumPosValidas(t) == 1){
-            for (int i = 0; i < t.GetFilas(); ++i){
-                for (int j = 0; j < t.GetColumnas(); ++j){
-                    if (t.PosicionValida(i,j)){
-                        t.SetFicha(i,j);
-                    }
-                }
-            }
-        }
-
-        else{
-
             t.Imprimir_tablero();
 
             char d;
@@ -114,7 +90,6 @@ bool Jugador::escogePosicion(Tablero& t){
 
                 aux = c - 'a';
             }while(aux > t.GetColumnas() || aux < 0 || n < 0 || n > t.GetFilas()+1 || !t.PosicionValida(n-1,aux));
-        }
 
         t.SetFicha(n-1,aux);
 
@@ -155,7 +130,6 @@ int Jugador::NumPosValidas(Tablero& t){
                 }
             }
     }
-
     return n;
 }
 
