@@ -51,11 +51,6 @@ public:
 
     int GetPuntuacion();
 
-    friend std::istream& operator>>(std::istream& is, Jugador& j);
-
-    friend std::ostream& operator<<(std::ostream& os, const Jugador& j);
-
-
     char *getNombre() const;
 };
 

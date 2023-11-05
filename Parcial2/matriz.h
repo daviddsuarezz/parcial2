@@ -23,5 +23,6 @@ public:
     int GetPosicion(const int& i, const int& j) const;
 
     void SetPosicion(int i,int j, int n);
+
 };
 #endif // MATRIZ_H
