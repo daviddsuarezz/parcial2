@@ -26,7 +26,6 @@ public:
 
     ~Jugador();
 
-    Jugador& operator=(Jugador& j);
 
     void TotalScore(const Tablero& t);
 
@@ -34,8 +33,6 @@ public:
     bool escogePosicion(Tablero& t);
 
     int NumPosValidas(Tablero& t);
-
-    int PosicionesValidasStruct(Tablero& t, Posicion v[]);
 
     void MostrarNombreJugador();
 

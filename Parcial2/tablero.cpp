@@ -9,6 +9,11 @@
 using namespace std;
 
 void Tablero::CambiarTurno(){
+    /**
+ * @brief Cambia el turno del jugador.
+ *
+ * Si el jugador actual no puede hacer un movimiento, el turno pasa al otro jugador. Si ninguno de los jugadores puede hacer un movimiento, el juego termina.
+ */
     if(turno == 1){// cambia el turno muy basico
         turno = 2;
     }
@@ -35,7 +40,15 @@ void Tablero::CambiarTurno(){
 
 }
 
-char Tablero::IntaChar(int n){ //esta funcion servira para que cuando el usuario ingrese un numero, este este asociado a una letra
+char Tablero::IntaChar(int n){
+    /**
+ * @brief Convierte un entero a un carácter para representar una ficha en el tablero.
+ *
+ * @param n El entero a convertir.
+ *
+ * @return Un carácter que representa una ficha en el tablero (' ' para 0, '*' para 1, '_' para 2).
+ */
+    //esta funcion servira para que cuando el usuario ingrese un numero, este este asociado a una letra
     if(n == 0){
         return ' '; // si la ficha ingresada es un 0, se pone espacion en blanco
     }
@@ -51,21 +64,49 @@ char Tablero::IntaChar(int n){ //esta funcion servira para que cuando el usuario
     return ' ';
 }
 Tablero::Tablero(int f, int c): tablero(f,c){
+    /**
+ * @brief Constructor de la clase Tablero.
+ *
+ * @param f Número de filas del tablero.
+ * @param c Número de columnas del tablero.
+ *
+ * Inicializa el tablero con las dimensiones especificadas, establece el turno inicial y las fichas restantes y máximas.
+ */
     turno = 1;
     jugador_comienzo = 2;
     fichas_restantes = 1;
     fichas_maximas = 1;
 }// constructor de la clase tablero
 
-int Tablero::GetFilas() const{ //devuelve la filas del tablero con la ayuda del metodo getfilas de la clase matriz
+int Tablero::GetFilas() const{
+    /**
+ * @brief Obtiene el número de filas del tablero.
+ *
+ * @return Número de filas del tablero.
+ */
+    //devuelve la filas del tablero con la ayuda del metodo getfilas de la clase matriz
     return tablero.GetFilas();
 }
 
-int Tablero::GetColumnas() const{ //devuelve las columnas del tablero con la ayuda del metodo getcolumnas de la clase matriz
+int Tablero::GetColumnas() const{
+    /**
+ * @brief Obtiene el número de columnas del tablero.
+ *
+ * @return Número de columnas del tablero.
+ */
+    //devuelve las columnas del tablero con la ayuda del metodo getcolumnas de la clase matriz
     return tablero.GetColumnas();
 }
 
 int Tablero::GetPosicion(const int& i, const int& j) const{
+    /**
+ * @brief Obtiene el valor en una posición específica del tablero.
+ *
+ * @param i Índice de la fila.
+ * @param j Índice de la columna.
+ *
+ * @return Valor en la posición (i, j) del tablero. Si los índices son inválidos, retorna -1.
+ */
     if(i < 0 || j < 0 || i > GetFilas() || j > GetColumnas()){ //sirve para saber si el usuario intodujo mal el numero de la fila o columna
         return -1;
     }
@@ -73,10 +114,20 @@ int Tablero::GetPosicion(const int& i, const int& j) const{
 }
 
 int Tablero::GetTurnoActual() const{
+    /**
+ * @brief Obtiene el turno actual.
+ *
+ * @return El turno actual.
+ */
     return turno; // retorna el turno
 }
 
 bool Tablero::FinPartida() const{
+    /**
+ * @brief Verifica si la partida ha terminado.
+ *
+ * @return Verdadero si la partida aún está en curso, falso si la partida ha terminado.
+ */
     if(turno == 0){ // si turno es cero, variable la cual cambiara con el uso del programa, indicará que acabrá la partida
         return false;
     }
@@ -85,7 +136,15 @@ bool Tablero::FinPartida() const{
 
 }
 
-int Tablero::Ganador() const{ // funcion que dará al ganador de la partida
+int Tablero::Ganador() const{
+    /**
+ * @brief Determina el ganador de la partida.
+ *
+ * @return El número del jugador que ha ganado la partida (1 o 2). Si hay un empate, retorna 0.
+ *
+ * Esta función cuenta el número de fichas de cada jugador en el tablero y determina el ganador en función de quién tiene más fichas.
+ */
+    // funcion que dará al ganador de la partida
     int contador1, contador2; // dos contadores para contar, el numero de fichas
     int resultado; // varianle resultado, la cual 1 es ganó el jugador1, y 2 ganó el jugador2
 
@@ -114,7 +173,15 @@ int Tablero::Ganador() const{ // funcion que dará al ganador de la partida
     return resultado;
 }
 
-int Tablero::GetPuntuacion(const int& n) const{ // obtendremos la puntacion de un jugador en especifico
+int Tablero::GetPuntuacion(const int& n) const{
+    /**
+ * @brief Obtiene la puntuación de un jugador específico.
+ *
+ * @param n El número del jugador (1 o 2).
+ *
+ * @return La puntuación del jugador especificado, que es el número de sus fichas en el tablero.
+ */
+    // obtendremos la puntacion de un jugador en especifico
     int puntuacion = 0;
     if(n == 1){
         for (int i = 0; i < tablero.GetFilas(); i++){ //estamos iterando sobre la matriz
@@ -143,18 +210,41 @@ int Tablero::GetPuntuacion(const int& n) const{ // obtendremos la puntacion de u
 
 
 
-void Tablero::InicializarTablero(){ // inicalizamos el tablero
+void Tablero::InicializarTablero(){
+    /**
+ * @brief Inicializa el tablero para el comienzo de una partida.
+ *
+ * Coloca las fichas iniciales de cada jugador en el centro del tablero.
+ */
+    // inicalizamos el tablero
     tablero.SetPosicion((GetFilas()/2)-1,(GetColumnas()/2)-1,1); // ficha del juegador uno en el medio del tablero, pero osea la fila del medio arriba
     tablero.SetPosicion((GetFilas()/2)-1,(GetColumnas()/2),2); // ficha del jugador dos en el medio deltablero, pero osea la fila del medio arriba
     tablero.SetPosicion((GetFilas()/2),(GetColumnas()/2)-1,2); // ficha del jugador dos en el medio deltablero, en la fila del medio
     tablero.SetPosicion((GetFilas()/2),(GetColumnas()/2),1); // ficha del juegador uno en el medio del tablero
 }
 
-void Tablero::SetTurno(int&n){ //le da un valor al atributo turno del tablero
+void Tablero::SetTurno(int&n){
+    /**
+ * @brief Establece el turno actual.
+ *
+ * @param n El número del jugador cuyo turno es (1 o 2).
+ */
+    //le da un valor al atributo turno del tablero
     turno = n;
 }
 
 bool Tablero::PosicionValida(const int& x, const int& y) const {
+
+    /**
+ * @brief Verifica si una posición específica en el tablero es válida para hacer un movimiento.
+ *
+ * @param x Índice de la fila.
+ * @param y Índice de la columna.
+ *
+ * @return Verdadero si la posición es válida para hacer un movimiento, falso en caso contrario.
+ *
+ * Una posición es válida para hacer un movimiento si está vacía y al colocar una ficha en esa posición, se voltearía al menos una ficha del oponente.
+ */
     if (GetPosicion(x, y) != 0) { // verifica si la posicion esta vacia
         return false;
     }
@@ -180,6 +270,18 @@ bool Tablero::PosicionValida(const int& x, const int& y) const {
 }
 
 bool Tablero::checkDirection(const int& x, const int& y, const int& dx, const int& dy, const int& otra) const {
+
+    /**
+ * @brief Verifica si al colocar una ficha en una posición específica en una dirección específica, se voltearía al menos una ficha del oponente.
+ *
+ * @param x Índice de la fila.
+ * @param y Índice de la columna.
+ * @param dx Dirección en el eje x.
+ * @param dy Dirección en el eje y.
+ * @param otra El número del jugador oponente.
+ *
+ * @return Verdadero si se voltearía al menos una ficha del oponente, falso en caso contrario.
+ */
     int iterador = 1;
     //recibe la misma, x y y, los dx y dy hacen referencia a los diferenciales, osea a la direccion donde se va a ir, otra hace referencia a la ficha del otro jugador
 
@@ -195,6 +297,13 @@ bool Tablero::checkDirection(const int& x, const int& y, const int& dx, const in
 
 
 bool Tablero::CanSetFicha(){
+    /**
+ * @brief Verifica si el jugador actual puede hacer un movimiento.
+ *
+ * @return Verdadero si el jugador actual puede hacer un movimiento, falso en caso contrario.
+ *
+ * Esta función verifica todas las posiciones en el tablero para ver si hay al menos una posición válida para hacer un movimiento.
+ */
     for(int i = 0; i < GetFilas(); i++){
         for(int j = 0; j < GetColumnas(); j++){ //iteramos sobre la matriz
             if(PosicionValida(i,j)){ // verificamos si se es valido colocar una ficha en esa posicion
@@ -207,6 +316,14 @@ bool Tablero::CanSetFicha(){
 }
 
 void Tablero::SetFicha(const int& x, const int& y){
+    /**
+ * @brief Coloca una ficha del jugador actual en una posición específica y voltea las fichas del oponente en consecuencia.
+ *
+ * @param x Índice de la fila.
+ * @param y Índice de la columna.
+ *
+ * Esta función verifica primero si la posición es válida para hacer un movimiento. Si es válida, coloca una ficha del jugador actual en esa posición y voltea las fichas del oponente en todas las direcciones válidas. Luego, verifica si el jugador actual puede hacer otro movimiento. Si no puede, cambia el turno al otro jugador.
+ */
 
     if(PosicionValida(x,y)){ //valida primero si la posicion que ingresó el usuario es valida
         int otra = (turno == 1) ? 2 : 1; //mismo cambio para verificar la ficha del rival
@@ -231,6 +348,17 @@ void Tablero::SetFicha(const int& x, const int& y){
 }
 
 void Tablero::setFichasInDirection(const int& x, const int& y, const int& dx, const int& dy, const int& otra){
+    /**
+ * @brief Voltea las fichas del oponente en una dirección específica a partir de una posición específica.
+ *
+ * @param x Índice de la fila.
+ * @param y Índice de la columna.
+ * @param dx Dirección en el eje x.
+ * @param dy Dirección en el eje y.
+ * @param otra El número del jugador oponente.
+ *
+ * Esta función verifica si al colocar una ficha del jugador actual en la posición (x, y) y moverse en la dirección (dx, dy), se encontraría una ficha del jugador actual. Si es así, voltea todas las fichas del oponente entre las dos fichas del jugador actual.
+ */
     int iterador = 1;
 
     while (GetPosicion(x + iterador * dx, y + iterador * dy) == otra) { // itera sobre toda esa direccion mientras sea igual a la del rival
@@ -248,13 +376,18 @@ void Tablero::setFichasInDirection(const int& x, const int& y, const int& dx, co
 
 
 void Tablero::Imprimir_tablero(){
+    /**
+ * @brief Imprime el tablero de juego en la consola.
+ *
+ * Esta función imprime el tablero de juego en la consola. Las fichas del jugador 1 se representan con '*', las fichas del jugador 2 se representan con 'o', las posiciones vacías se representan con ' ' y las posiciones válidas para hacer un movimiento se representan con '.'. También imprime el turno actual y el número de fichas restantes y máximas. Si la partida ha terminado, imprime un mensaje indicando que la partida ha finalizado.
+ */
 
     char c = 'a'; // para darle un valor a las columnas
 
     cout << "  "; // espacio
 
     for(int i = 0; i < tablero.GetFilas();  i++){
-        cout << c <<" "; // por medio del codigo asscci podemos ir aumentado de a,b,c....
+        cout << "\033[1;31m" << c << "\033[0m "; // por medio del codigo asscci podemos ir aumentado de a,b,c....
         c++;
     }
 
@@ -269,14 +402,14 @@ void Tablero::Imprimir_tablero(){
     cout << endl; // salto de linea
 
     for(int i = 0; i < tablero.GetFilas(); i++){
-        cout << i+1 <<"|";  // el numero de la fila El código de escape \033[1;34m cambia el color del texto a azul brillante, y \033[1;0m restablece el color del texto a su valor predeterminado. Por lo tanto, la letra se imprimirá en azul brillante.
+        cout << "\033[1;34m" << i+1 << "\033[0m|";  // el numero de la fila El código de escape \033[1;34m cambia el color del texto a azul brillante, y \033[1;0m restablece el color del texto a su valor predeterminado. Por lo tanto, la letra se imprimirá en azul brillante.
         for(int j = 0; j < tablero.GetFilas(); j++){ // vamos a iterar sobre la matriz
             if(tablero.GetPosicion(i,j) == 1){ // si la posicion es igual a 1
-                cout << "*"; //va a cambiar ese numero a un char, lo imprime en colo amarillo brillante por codigo ansi
+                cout << "\033[1;33m*\033[0m"; //va a cambiar ese numero a un char, lo imprime en colo amarillo brillante por codigo ansi
             }
 
             if(tablero.GetPosicion(i,j) == 2){
-                cout << "o";  // cambia el 2 encontrado por el _ y lo imprime en color verde por codigo ansi
+                cout << "\033[1;32mo\033[0m";  // cambia el 2 encontrado por el _ y lo imprime en color verde por codigo ansi
             }
 
             if(tablero.GetPosicion(i,j) == 0 && !PosicionValida(i,j)){ // y aqui va a imprimir el espacio en blanco
