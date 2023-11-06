@@ -58,7 +58,7 @@ char Tablero::IntaChar(int n){
     }
 
     if(n == 2){
-        return '_'; // si la ficha ingresada es dos, se pone o
+        return 'o'; // si la ficha ingresada es dos, se pone o
     }
 
     return ' ';
