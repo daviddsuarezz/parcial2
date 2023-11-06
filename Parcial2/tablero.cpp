@@ -371,10 +371,6 @@ void Tablero::setFichasInDirection(const int& x, const int& y, const int& dx, co
     }
 }
 
-
-
-
-
 void Tablero::Imprimir_tablero(){
     /**
  * @brief Imprime el tablero de juego en la consola.
