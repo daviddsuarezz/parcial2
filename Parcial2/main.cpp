@@ -36,36 +36,41 @@ void GuardarPartida(Jugador& j1, Jugador& j2){
  * @param j1 Una referencia al primer jugador.
  * @param j2 Una referencia al segundo jugador.
  */
-    time_t ahora = time(0); // Obtiene la hora actual en segundos desde la época Unix (1 de enero de 1970)
-    tm *ltm = localtime(&ahora); // Convierte la hora actual a la hora local
-    string ganador; // Declara una variable para almacenar el nombre del ganador
-    Partida partida; // Crea un objeto de la clase Partida
-    partida.jugador1 = j1.getNombre(); // Obtiene el nombre del jugador 1
-    partida.fichas1 = j1.GetPuntuacion(); // Obtiene la puntuación del jugador 1
-    partida.jugador2 = j2.getNombre(); // Obtiene el nombre del jugador 2
-    partida.fichas2 = j2.GetPuntuacion(); // Obtiene la puntuación del jugador 2
-    partida.fecha = to_string(ltm->tm_mday) + "/" + to_string(1 + ltm->tm_mon) + "/" + to_string(1900 + ltm->tm_year); // Formatea la fecha actual en el formato DD/MM/AAAA
-    partida.hora = to_string(ltm->tm_hour) + ":" +to_string(ltm->tm_min) + ":" + to_string(ltm->tm_sec); // Formatea la hora actual en el formato HH:MM:SS
-    if(partida.fichas1 > partida.fichas2){ // Comprueba si el jugador 1 tiene más fichas que el jugador 2
-        ganador = partida.jugador1; // Si es así, el jugador 1 es el ganador
+    time_t ahora = time(0);
+    tm *ltm = localtime(&ahora);
+    string ganador;
+    Partida partida;
+    partida.jugador1 = j1.getNombre();
+    partida.fichas1 = j1.GetPuntuacion();
+    partida.jugador2 = j2.getNombre();
+    partida.fichas2 = j2.GetPuntuacion();
+    partida.fecha = to_string(ltm->tm_mday) + "/" + to_string(1 + ltm->tm_mon) + "/" + to_string(1900 + ltm->tm_year); //por tema de funcionalidad de la libreria se le agrega 1900
+    partida.hora = to_string(ltm->tm_hour) + ":" +to_string(ltm->tm_min) + ":" + to_string(ltm->tm_sec);
+    if(partida.fichas1 > partida.fichas2){
+        ganador = partida.jugador1;
     }else{
-        ganador = partida.jugador2; // Si no, el jugador 2 es el ganador
+        ganador = partida.jugador2;
     }
-    partida.ganador = ganador; // Almacena el nombre del ganador en el objeto partida
-    ofstream archivo("historico.txt", ios_base::app); // Abre el archivo "historico.txt" en modo de agregar
-    if(!archivo){ // Comprueba si el archivo se abrió correctamente
-        cout<<"Error al guardar el archivo historico.txt"; // Si no se abrió correctamente, muestra un mensaje de error
-        exit(EXIT_FAILURE); // Y termina el programa
+    partida.ganador = ganador;
+    // Abre el archivo en modo de agregar
+    ofstream archivo("historico.txt", ios_base::app);
+    if(!archivo){
+        cout<<"Error al guardar el archivo historico.txt";
+        exit(EXIT_FAILURE);
     }
-    archivo << partida.fecha << ";" // Escribe la fecha de la partida en el archivo
-            << partida.hora << ";" // Escribe la hora de la partida en el archivo
-            << partida.jugador1 << ";" // Escribe el nombre del jugador 1 en el archivo
-            << to_string(partida.fichas1) << ";" // Escribe la puntuación del jugador 1 en el archivo
-            << partida.jugador2 << ";" // Escribe el nombre del jugador 2 en el archivo
-            << to_string(partida.fichas2) << ";" // Escribe la puntuación del jugador 2 en el archivo
-            << partida.ganador // Escribe el nombre del ganador en el archivo
-            << "\n"; // Añade un salto de línea al final
-    archivo.close(); // Cierra el archivo
+
+    // Escribe los detalles de la partida en el archivo
+    archivo << partida.fecha << ";"
+            << partida.hora << ";"
+            << partida.jugador1 << ";"
+            << to_string(partida.fichas1) << ";"
+            << partida.jugador2 << ";"
+            << to_string(partida.fichas2) << ";"
+            << partida.ganador
+            << "\n";
+
+    // Cierra el archivo
+    archivo.close();
 }
 
 
@@ -78,44 +83,44 @@ void leerHistorico() {
  * Los detalles de la partida incluyen la fecha, la hora, los nombres de los jugadores, sus puntuaciones y el ganador de la partida.
  * Después de leer los detalles de una partida, la función los imprime en la consola.
  */
-    ifstream archivo("historico.txt"); // Abre el archivo "historico.txt" para lectura
+    ifstream archivo("historico.txt"); //archivo
 
-    if(!archivo){ // Comprueba si el archivo se abrió correctamente
-        cout<<"Error al abrir el archivo historico.txt"; // Si no se abrió correctamente, muestra un mensaje de error
-        exit(EXIT_FAILURE); // Y termina el programa
+    if(!archivo){
+        cout<<"Error al abrir el archivo historico.txt";
+        exit(EXIT_FAILURE);
     }
 
-    string linea; // Declara una variable para almacenar cada línea del archivo
 
-    while (std::getline(archivo, linea)) { // Lee el archivo línea por línea
-        istringstream iss(linea); // Crea un flujo de entrada a partir de la línea
-        string fecha, hora, jugador1, jugador2, ganador; // Declara variables para almacenar los datos de la partida
-        int fichas1, fichas2; // Declara variables para almacenar las puntuaciones de los jugadores
+    string linea;
 
-        getline(iss, fecha, ';'); // Lee la fecha de la partida
-        getline(iss, hora, ';'); // Lee la hora de la partida
-        getline(iss, jugador1, ';'); // Lee el nombre del jugador 1
-        iss >> fichas1; // Lee la puntuación del jugador 1
+    while (std::getline(archivo, linea)) {
+        istringstream iss(linea); // string dinamico
+        string fecha, hora, jugador1, jugador2, ganador;
+        int fichas1, fichas2;
+
+        getline(iss, fecha, ';'); // lee hasta los separadores, char por char
+        getline(iss, hora, ';');
+        getline(iss, jugador1, ';');
+        iss >> fichas1; // lo toma completo
         iss.ignore();  // Ignora el delimitador ';'
-        getline(iss, jugador2, ';'); // Lee el nombre del jugador 2
-        iss >> fichas2; // Lee la puntuación del jugador 2
+        getline(iss, jugador2, ';');
+        iss >> fichas2;
         iss.ignore();  // Ignora el delimitador ';'
-        getline(iss, ganador); // Lee el nombre del ganador
+        getline(iss, ganador);
 
         // Ahora puedes usar los datos leídos
         // Por ejemplo, imprimirlos en la consola:
         cout
-            << "Fecha: " << fecha << "\n" // Imprime la fecha de la partida
-            << "Hora: " << hora << "\n" // Imprime la hora de la partida
-            << "Jugador 1: " << jugador1 << ", Fichas: " << fichas1 << "\n" // Imprime el nombre y la puntuación del jugador 1
-            << "Jugador 2: " << jugador2 << ", Fichas: " << fichas2 << "\n" // Imprime el nombre y la puntuación del jugador 2
-            << "Ganador: " << ganador // Imprime el nombre del ganador
-            << "\n------------------------\n"
-            <<endl;
-
+             << "Fecha: " << fecha << "\n"
+             << "Hora: " << hora << "\n"
+             << "Jugador 1: " << jugador1 << ", Fichas: " << fichas1 << "\n"
+             << "Jugador 2: " << jugador2 << ", Fichas: " << fichas2 << "\n"
+             << "Ganador: " << ganador
+             << "\n------------------------\n"
+             <<endl;
     }
 
-    archivo.close(); // Cierra el archivo
+    archivo.close();
 }
 
 bool Reversi(Jugador& jugador_1, Jugador& jugador_2, Tablero& t){
@@ -134,55 +139,57 @@ bool Reversi(Jugador& jugador_1, Jugador& jugador_2, Tablero& t){
  * Al final del juego, se imprime el tablero y se anuncia el ganador. También se actualizan las puntuaciones de los jugadores y se guarda la partida.
  */
 
-    while(t.FinPartida()){ // Mientras la partida no haya terminado
+        while(t.FinPartida()){
 
-        if(t.CanSetFicha()){ // Si se puede colocar una ficha
 
-            if(t.GetTurnoActual()==1){ // Si es el turno del jugador 1
-                if(jugador_1.escogePosicion(t)){ // El jugador 1 escoge una posición
+            if(t.CanSetFicha()){
+
+                if(t.GetTurnoActual()==1){
+                    if(jugador_1.escogePosicion(t)){
+                    }
                 }
-            }
 
-            if(t.GetTurnoActual()==2){ // Si es el turno del jugador 2
-                if(jugador_2.escogePosicion(t)){ // El jugador 2 escoge una posición
+                if(t.GetTurnoActual()==2){
+                    if(jugador_2.escogePosicion(t)){
 
+                    }
                 }
             }
         }
-    }
 
-    t.Imprimir_tablero(); // Imprime el tablero
+        t.Imprimir_tablero();
 
-    if(t.Ganador() == 1){ // Si el ganador es el jugador 1
-        jugador_1.PartidaGanada(); // El jugador 1 gana la partida
-        cout << endl << "Ganador jugador ";
-        jugador_1.MostrarNombreJugador(); // Muestra el nombre del jugador 1
-        cout << "." << endl;
-    }else if(t.Ganador() == 2){ // Si el ganador es el jugador 2
-        jugador_2.PartidaGanada(); // El jugador 2 gana la partida
-        cout << endl  << "Ganador jugador ";
-        jugador_2.MostrarNombreJugador(); // Muestra el nombre del jugador 2
-        cout << "." << endl;
-    }
-    else{
-        cout << "Ha habido un empate." << endl; // Si no hay ganador, se declara un empate
-    }
+        if(t.Ganador() == 1){
+            jugador_1.PartidaGanada();
+            cout << endl << "Ganador jugador ";
+            jugador_1.MostrarNombreJugador();
+            cout << "." << endl;
+        }else if(t.Ganador() == 2){
+            jugador_2.PartidaGanada();
+            cout << endl  << "Ganador jugador ";
+            jugador_2.MostrarNombreJugador();
+            cout << "." << endl;
+        }
+        else{
+            cout << "Ha habido un empate." << endl;
+        }
 
-    jugador_1.TotalScore(t); // Calcula la puntuación total del jugador 1
-    jugador_2.TotalScore(t); // Calcula la puntuación total del jugador 2
+        jugador_1.TotalScore(t);
+        jugador_2.TotalScore(t);
 
-    cout << "Resultados tras esta partida: " << endl; // Muestra los resultados de la partida
 
-    cout << "\t-";
-    jugador_1.MostrarNombreJugador(); // Muestra el nombre del jugador 1
-    cout << " hizo una puntuacion de: " << jugador_1.GetPuntuacion() << endl; // Muestra la puntuación del jugador 1
-    cout << "\t-";
-    jugador_2.MostrarNombreJugador(); // Muestra el nombre del jugador 2
-    cout   << " hizo una puntuacion de: " << jugador_2.GetPuntuacion() << endl; // Muestra la puntuación del jugador 2
-    GuardarPartida(jugador_1,jugador_2); // Guarda los detalles de la partida
-    cout << endl;
-    cout << endl;
-    return 1; // Termina la función con un valor de retorno de 1
+        cout << "Resultados tras esta partida: " << endl;
+
+        cout << "\t-";
+        jugador_1.MostrarNombreJugador();
+        cout << " hizo una puntuacion de: " << jugador_1.GetPuntuacion() << endl;
+        cout << "\t-";
+        jugador_2.MostrarNombreJugador();
+        cout   << " hizo una puntuacion de: " << jugador_2.GetPuntuacion() << endl;
+        GuardarPartida(jugador_1,jugador_2);
+        cout << endl;
+        cout << endl;
+        return 1;
 }
 
 int main(){
@@ -231,10 +238,8 @@ int main(){
             cin.ignore();
             cin.getline(linea,100);
 
-
-            // Validación para asegurar que el nombre no esté vacío ni sea solo espacios en blanco
-            // Validación para asegurar que el nombre no esté vacío, verficamos que toda la linea no cuente solo espacios vacios
-            while(strlen(linea) == 0 || linea[0] == ' ') {
+            // Validación para asegurar que el nombre no esté vacío
+            while(strlen(linea) == 0) {
                     cout << "El nombre no puede estar vacío. Por favor, inténtalo de nuevo: ";
                     cin.getline(linea,100);
             }
@@ -249,10 +254,9 @@ int main(){
             cin.getline(linea_2,100);
 
             // Validación para asegurar que el nombre no esté vacío
-            while(strlen(linea_2) == 0 || linea_2[0] == ' ') { // strleen mide el tamaño del char
+            while(strlen(linea_2) == 0) {
                     cout << "El nombre no puede estar vacío. Por favor, inténtalo de nuevo: ";
                     cin.getline(linea_2,100);
-
             }
 
             jugador_2.setNombre(linea_2);
