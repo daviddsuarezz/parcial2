@@ -387,7 +387,7 @@ void Tablero::Imprimir_tablero(){
     cout << "  "; // espacio
 
     for(int i = 0; i < tablero.GetFilas();  i++){
-        cout << "\033[1;31m" << c << "\033[0m "; // por medio del codigo asscci podemos ir aumentado de a,b,c....
+        cout  << c << " "; // por medio del codigo asscci podemos ir aumentado de a,b,c....
         c++;
     }
 
@@ -402,14 +402,14 @@ void Tablero::Imprimir_tablero(){
     cout << endl; // salto de linea
 
     for(int i = 0; i < tablero.GetFilas(); i++){
-        cout << "\033[1;34m" << i+1 << "\033[0m|";  // el numero de la fila El código de escape \033[1;34m cambia el color del texto a azul brillante, y \033[1;0m restablece el color del texto a su valor predeterminado. Por lo tanto, la letra se imprimirá en azul brillante.
+        cout << i+1 << "|";  // el numero de la fila El código de escape \033[1;34m cambia el color del texto a azul brillante, y \033[1;0m restablece el color del texto a su valor predeterminado. Por lo tanto, la letra se imprimirá en azul brillante.
         for(int j = 0; j < tablero.GetFilas(); j++){ // vamos a iterar sobre la matriz
             if(tablero.GetPosicion(i,j) == 1){ // si la posicion es igual a 1
-                cout << "\033[1;33m*\033[0m"; //va a cambiar ese numero a un char, lo imprime en colo amarillo brillante por codigo ansi
+                cout << "*"; //va a cambiar ese numero a un char, lo imprime en colo amarillo brillante por codigo ansi
             }
 
             if(tablero.GetPosicion(i,j) == 2){
-                cout << "\033[1;32mo\033[0m";  // cambia el 2 encontrado por el _ y lo imprime en color verde por codigo ansi
+                cout << "o";  // cambia el 2 encontrado por el _ y lo imprime en color verde por codigo ansi
             }
 
             if(tablero.GetPosicion(i,j) == 0 && !PosicionValida(i,j)){ // y aqui va a imprimir el espacio en blanco
