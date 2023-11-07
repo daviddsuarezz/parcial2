@@ -34,3 +34,4 @@
 6/11/2023;18:3:49;dsf;8;fdsfs;0;dsf
 6/11/2023;18:11:58;dsd;8;xx;0;dsd
 6/11/2023;18:19:11;dsf;4;fds ds;12;fds ds
+6/11/2023;19:39:46;DAVID;6;ALEJANDRO;10;ALEJANDRO

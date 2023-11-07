@@ -230,17 +230,11 @@ int main(){
             n = 1;
             cin.ignore();
             cin.getline(linea,100);
-            // Validación para asegurar que el nombre no esté vacío ni sea solo espacios en blanco
-            bool soloEspacios = true;
-            for(int i = 0; i < strlen(linea); i++) {
-                    if(!isspace(linea[i])) {
-                        soloEspacios = false;
-                        break;
-                    }
-            }
 
+
+            // Validación para asegurar que el nombre no esté vacío ni sea solo espacios en blanco
             // Validación para asegurar que el nombre no esté vacío, verficamos que toda la linea no cuente solo espacios vacios
-            while(strlen(linea) == 0 || soloEspacios ) {
+            while(strlen(linea) == 0 || linea[0] == ' ') {
                     cout << "El nombre no puede estar vacío. Por favor, inténtalo de nuevo: ";
                     cin.getline(linea,100);
             }
@@ -255,9 +249,10 @@ int main(){
             cin.getline(linea_2,100);
 
             // Validación para asegurar que el nombre no esté vacío
-            while(strlen(linea_2) == 0 || soloEspacios ) { // strleen mide el tamaño del char
+            while(strlen(linea_2) == 0 || linea_2[0] == ' ') { // strleen mide el tamaño del char
                     cout << "El nombre no puede estar vacío. Por favor, inténtalo de nuevo: ";
                     cin.getline(linea_2,100);
+
             }
 
             jugador_2.setNombre(linea_2);
