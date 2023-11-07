@@ -292,6 +292,7 @@ int main(){
             cout<<"1.volver al menu principal.\n0.salir(cualquier otra tecla).\n"<<endl;
             cin>>opcion;
             (opcion==1)?opcion=3:opcion=0;
+            //sobreescribir
 
         }
     }
